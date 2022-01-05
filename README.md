@@ -10,4 +10,14 @@
 
 This repository is for students at Campus Bergen taking the course PGR112 this semester.
 
-This repository will be updated from time to time, where bigger changes made to the repository will be announced of Canvas.
+This repository will change during the semester, from lecture to lecture, where bigger changes made to the repository will be announced on Canvas.
+
+---
+
+What will GitHub be used for during this course?
+
+- Course materials
+- Tasks
+- Delivieres
+- Discussions
+- Version Control
