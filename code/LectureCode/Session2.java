@@ -1,4 +1,4 @@
-package LectureMaterial;
+package LectureCode;
 
 import java.util.Scanner;
 
