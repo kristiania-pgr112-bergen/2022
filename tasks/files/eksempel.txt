@@ -1,0 +1,5 @@
+Oj!
+Dette gikk jo veldig bra!
+Gratulerer så mye!
+In other news:
+You've now read stuff from a file!
