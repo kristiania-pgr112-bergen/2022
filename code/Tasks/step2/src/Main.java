@@ -1,3 +1,7 @@
+package Tasks.step2.src;
+
+import Tasks.step2.src.Assignment;
+
 public class Main {
 
     /**

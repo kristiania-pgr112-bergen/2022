@@ -1,3 +1,5 @@
+package Tasks.step2.src;
+
 public class Assignment {
     /**
      * Returns the sum of all the received numbers.
