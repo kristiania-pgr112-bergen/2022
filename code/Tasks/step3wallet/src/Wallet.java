@@ -1,4 +1,4 @@
-package Tasks.step3.src;
+package Tasks.step3wallet.src;
 
 /**
  *  Wallet-class

@@ -1,4 +1,4 @@
-package Tasks.step3.test;
+package Tasks.step3wallet.test;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +12,7 @@ import java.lang.reflect.Modifier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import Tasks.step3.src.Wallet;
+import Tasks.step3wallet.src.Wallet;
 
 public class WalletTest {
     private final PrintStream standardOut = System.out;
