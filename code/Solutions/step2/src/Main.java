@@ -1,3 +1,5 @@
+package Solutions.step2.src;
+
 public class Main {
 
     /**
