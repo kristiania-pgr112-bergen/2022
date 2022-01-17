@@ -8,6 +8,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -53,15 +54,40 @@ public class WalletTest {
             field = wallet.getClass().getDeclaredField(fieldName);
         }
         catch (NoSuchFieldException e) {
-            throw new NoSuchFieldException("No zipper field found with the expected type boolean");
+            throw new NoSuchFieldException("No zipper field found within the class");
         }
 
-        assertTrue(field.getType().isPrimitive());
-        assertEquals(field.getType().toString(), "boolean");
+        assertEquals(Modifier.PRIVATE, field.getModifiers(), "Field does not have a private access modifier");
+        assertTrue(field.getType().isPrimitive(), "Field type expected to be a primitive type");
+        assertEquals(field.getType().toString(), "boolean", "Field type expected to be boolean");
     }
 
     @Test
-    public void testWalletZipperCanOpenAndClose() {
-        // Method open = wallet.getClass().getDeclaredMethod("zipperOpen");
+    public void testWalletZipperCanOpenAndClose() throws NoSuchMethodException {
+        Method open;
+        Method close;
+
+        // open zipper functionality
+        try {
+            open = wallet.getClass().getDeclaredMethod("zipperOpen");
+        }
+        catch(NoSuchMethodException e) {
+            throw new NoSuchMethodException("Could not locate a method by the name zipperOpen");
+        }
+
+        assertEquals(Modifier.PUBLIC, open.getModifiers(), "Due to encapsulation, we expect zipperOpen to be public");
+        assertEquals(open.getReturnType().toString(), "void", "We expect zipperOpen to return nothing");
+
+        // close zipper functionality
+        try {
+            close = wallet.getClass().getDeclaredMethod("zipperClose");
+        }
+        catch(NoSuchMethodException e) {
+            throw new NoSuchMethodException("Could not locate a method by the name zipperClose");
+        }
+
+        assertEquals(Modifier.PUBLIC, close.getModifiers(), "Due to encapsulation, we expect zipperClose to be public");
+        assertEquals(close.getReturnType().toString(), "void", "We expect zipperClose to return nothing");
+
     }
 }
