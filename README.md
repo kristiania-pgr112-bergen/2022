@@ -14,6 +14,27 @@ This repository will change during the semester, from lecture to lecture, where 
 
 ---
 
+## File structure
+
+```
+code/
+├─ LectureCode/
+│       Contains code from the lectures, often requested from students
+├─ Solutions/
+│       Contains example solutions to tasks from previous weeks
+├─ Tasks/
+│       Contains a code basis for some of the tasks
+│
+
+slides/
+        Contains the slides used in the lectures
+
+tasks/
+        Contains .PDF files which contains various tasks 
+```
+
+---
+
 What will GitHub be used for during this course?
 
 - Course materials
