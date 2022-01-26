@@ -1,0 +1,4 @@
+Dette gikk jo veldig bra!
+Du har klart å lese fra fil.
+Nå kan du gønne på videre til oppgave 5:)
+Der skal du skrive til fil.
