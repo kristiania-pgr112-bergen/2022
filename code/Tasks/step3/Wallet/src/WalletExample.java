@@ -1,4 +1,4 @@
-package Tasks.step3wallet.src;
+package Tasks.step3.Wallet.src;
 
 /**
  *  This is a very simple wallet, available as a Java-class named Wallet.
