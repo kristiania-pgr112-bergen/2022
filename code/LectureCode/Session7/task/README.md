@@ -1,17 +1,11 @@
 # Session 7 - Task
 
-This task explores the creation of different objects, created as instances of different classes written by you.
+This task explores the creation of different objects, created as instances from different classes written by you.
 
-1. Inheritance and Aggregation
-
-
-
-2. Super and Final
-
-## Implementing objects
+## Implementing different classes
 Within the `object` package, in IntelliJ, create a new class.
 
-Name it as any object, begin with simple ones.
+Name it as any object, and begin with "simple" ones.
 
 For example:
 - wallet
@@ -34,4 +28,50 @@ Specific state can also be stored as boolean fields, for example:
 - isInitialized
 - isCeilingFanRunning
 - isCold
+
+If you get stuck, try creating another class, and get back to your code later. 
+
+---
+
+
+# Specific tasks
+
+- [ ] Create at least 3 new objects within the `object`-package.
+- [ ] Create an object that inherits from another object that you have created, to use less code over all.
+- [ ] Create a main method (in which class isn't important) that uses some of the classes that you have made. You can see `examples/Wallet` and `examples/Coin` for example of main-methods which does this.
+
+> Note: When creating these objects, take notes! 
+
+
+# Extra tasks
+
+- [ ] Create the following classes:
+    - `FileArchive` `File`
+    - The archive should contain files:
+      - You can add and remove files
+      - No duplicate files
+      - The archive should have a method which prints the list of files within the archive. Search for "ASCII file tree" for inspiration.
+    - **Extra**: Implement folders and files within folders inside your archive, and update the method which displays the directory of files
+    - **Hint**: Implement a `Folder` class or use a boolean flag in the `File`-class to 
+
+## If you want to share some code with the class:
+
+- Create a new class within the `examples`-package (In IntelliJ) which represents an object of your choice.
+    - Create a branch before you start
+    - Write your code and comments
+    - Push this new branch with your code committed upstream
+    - Open a pull request via GitHub
+
+- Hint: Explore how to do each task above! 
+
+---
+
+Tips:
+
+Always ask yourself questions when coding:
+- How do I do this specific thing?
+- What should be accessible when?
+- Have I done something similar before?
+
+Remember, do not just read code, play with it!
 
