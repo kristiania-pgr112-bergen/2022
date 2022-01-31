@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Example {
     public static void main(String[] args) {
-        /* A shopping card and three products */
+        /* A shopping cart and three products */
 
         Product pencil = new Product();
         Product eraser = new Product();
@@ -21,7 +21,7 @@ public class Example {
 
         ShoppingCart cart = new ShoppingCart();
 
-        cart.addProduct(pencil);
+        cart.addProduct(pencil, 3);
         cart.addProduct(eraser);
         cart.addProduct(paper);
 
@@ -38,6 +38,12 @@ class ShoppingCart {
 
     void addProduct(Product product) {
         this.products.add(product);
+    }
+
+    void addProduct(Product product, int quantity) {
+        for (int i = 0; i < quantity; i ++) {
+            addProduct(product);
+        }
     }
 
     void removeProduct(Product product) {
