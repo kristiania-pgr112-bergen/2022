@@ -10,7 +10,7 @@ public class TerminalMenu {
 
         // Create 3 different options ( + 1 extra to exit the menu)
 
-        // Print the different options together with a number (for selection an option)
+        // Print the different options together with a number (for selecting an option)
 
         // Let the user select one of the options
 
