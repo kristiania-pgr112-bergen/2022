@@ -1,48 +1,54 @@
 package LectureCode.Session8.src.AbstractExample;
 
 abstract class Shape {
-    protected int Id;
-    protected boolean filled;
-    protected Color color;
-    static double weightOfLine;
+    private Color color;
+    private boolean filled;
 
+    public int getId() {
+        return Id;
+    }
+
+    private final int Id;
+    private static double lineOfWeight;
+    public static double getLineOfWeight() {
+        return lineOfWeight;
+    }
+    public static void setLineOfWeight(double lineOfWeight) {
+        Shape.lineOfWeight = lineOfWeight;
+    }
     /**
      * abstract class can also have constructor
-     *
-     * @param Id
      */
     public Shape(int Id) {
         this.Id = Id;
-        System.out.println("A shape is created, and its id is " + Id);
+        setColor(Color.Green);
     }
-
-    /**
-     * abstract method
-     */
-    abstract public void drawMe();
-
-    /**
-     * non-abstract method (method with body)
-     */
-    public void colorMe() {
-        this.color = Color.Green;
+    public Color getColor() {
+        return color;
     }
-
+    /**
+     * regular, non-abstract method (method with body)
+     */
+    public void setColor(Color color) {
+        this.color = color;
+    }
+    public boolean isFilled() {
+        return filled;
+    }
     /**
      * final method, not to be overriden
      */
-    final public void fillMe() {
-        this.filled = true;
-        System.out.println("I am filled");
+    final public void setFilled(boolean filled) {
+        this.filled = filled;
     }
-
     /**
-     * static method
-     *
-     * @param weightOfLine
+     * abstract method
      */
-    static public void setLineWeightForMe(double weightOfLine) {
-        Shape.weightOfLine = weightOfLine;
-        System.out.println("The weight of line is " + weightOfLine);
+    public abstract double getArea();
+    public abstract double getPerimeter();
+
+    @Override
+    public String toString() {
+        return String.format("A shape is created, and its id is " + Id);
     }
 }
