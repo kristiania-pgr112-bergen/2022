@@ -8,7 +8,7 @@ import java.util.Scanner;
  *  Task 5
  *          Ask N questions and get N answers
  *
- *  - [ ] Ask how many questions to gather as an int
+ *  - [x] Ask how many questions to gather as an int
  *  - [ ] Use a loop to ask for that many questions
  *  - [ ] Store each question received in the questions ArrayList
  *  - [ ] Ask each question and collect answers into the answers ArrayList
@@ -32,15 +32,19 @@ public class AskQuestionsGetAnswers {
 
     int questionCount = 0;
 
-    void addQuestion(String question) {
+    void getQuestionCount() {
+        System.out.println("How many questions do you want to add?");
 
+        this.questionCount = this.scanner.nextInt();
     }
 
-    void getAnswer() {
-
+    void start() {
+        this.getQuestionCount();
     }
 
     public static void main(String[] args) {
         AskQuestionsGetAnswers FAQ = new AskQuestionsGetAnswers();
+
+        FAQ.start();
     }
 }
