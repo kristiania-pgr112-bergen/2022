@@ -2,7 +2,22 @@ package LectureCode.Session9;
 
 public class Languages {
     public static void main(String[] args) {
+        English english = new English();
 
+        printLanguageName(english);
+    }
+
+    public static void printLanguageName(AnyLanguage language) {
+        language.printLanguageName();
+    }
+
+    public  static void compileLanguage(AnyLanguage language) {
+        if (language instanceof ProgrammingLanguage) {
+            ((ProgrammingLanguage) language).compile();
+        }
+        else {
+            System.out.println("This is not a programming language!");
+        }
     }
 }
 
@@ -38,6 +53,6 @@ class Java extends AnyLanguage implements ProgrammingLanguage {
     }
 
     public void compile() {
-        //
+        System.out.println("I should compile some code now!");
     }
 }
