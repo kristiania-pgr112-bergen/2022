@@ -1,8 +1,8 @@
-package LectureCode;
+package LectureCode.Session2;
 
 import java.util.Scanner;
 
-public class Session2 {
+public class ScannerExample {
     public static void main(String[] args) {
 
         Scanner input = new Scanner(System.in);
