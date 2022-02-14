@@ -11,7 +11,7 @@ public class Rectangle extends Shape {
      * 0: topLeft
      * 1: bottomRight
      */
-    private final MovablePoint[] corners = new MovablePoint[2];
+    final MovablePoint[] corners = new MovablePoint[2];
 
     /*
         Let's have only one constructor. We require that all fields are populated through constructor.
