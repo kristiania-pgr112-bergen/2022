@@ -9,8 +9,14 @@ public class Square extends Rectangle {
         We now have no alternative options when creating a square object.
         Notice how we use side as both width and length when we call the parent constructor.
      */
-    public Square(double side, Color color, boolean filled) {
-        super(side, side, color, filled);
+    public Square(
+            MovablePoint topLeft,
+            MovablePoint bottomRight,
+            double side,
+            Color color,
+            boolean filled
+    ) {
+        super(topLeft, bottomRight, side, side, color, filled);
     }
 
     // Getter for side

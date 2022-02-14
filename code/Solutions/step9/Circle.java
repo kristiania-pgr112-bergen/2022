@@ -47,6 +47,22 @@ public class Circle extends Shape {
         return 2*Math.PI*radius;
     }
 
+    public void moveUp(double distance) {
+        this.center.moveUp(distance);
+    }
+
+    public void moveDown(double distance) {
+        this.center.moveDown(distance);
+    }
+
+    public void moveLeft(double distance) {
+        this.center.moveLeft(distance);
+    }
+
+    public void moveRight(double distance) {
+
+    }
+
     /*
         We override a method from the Object class.
         Remember that all classes inherit from the Object class.

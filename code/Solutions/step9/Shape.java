@@ -2,7 +2,7 @@ package Solutions.step9;
 
 import java.awt.*;
 
-public abstract class Shape {
+public abstract class Shape implements Movable {
 
     private Color color;
     private boolean filled;

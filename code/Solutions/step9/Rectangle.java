@@ -7,12 +7,27 @@ public class Rectangle extends Shape {
     private double width;
     private double length;
 
+    /**
+     * 0: topLeft
+     * 1: bottomRight
+     */
+    private final MovablePoint[] corners = new MovablePoint[2];
+
     /*
         Let's have only one constructor. We require that all fields are populated through constructor.
         We now have no alternative options when creating a rectangle object.
      */
-    Rectangle(double width, double length, Color color, boolean filled) {
+    Rectangle(
+            MovablePoint topLeft,
+            MovablePoint bottomRight,
+            double width,
+            double length,
+            Color color,
+            boolean filled
+    ) {
         super(color, filled);
+        this.corners[0] = topLeft;
+        this.corners[1] = bottomRight;
         this.width = width;
         this.length = length;
     }
@@ -43,7 +58,7 @@ public class Rectangle extends Shape {
         implementation details for an abstract method defined in class Shape.
     */
     public double getArea() {
-        return length * width;
+        return getLength() * getWidth();
     }
 
     /*
@@ -52,7 +67,27 @@ public class Rectangle extends Shape {
         implementation details for an abstract method defined in class Shape.
     */
     public double getPerimeter() {
-        return 2 * (length + width);
+        return 2 * (getLength() + getWidth());
+    }
+
+    public void moveUp(double distance) {
+        this.corners[0].moveUp(distance);
+        this.corners[1].moveUp(distance);
+    }
+
+    public void moveDown(double distance) {
+        this.corners[0].moveDown(distance);
+        this.corners[1].moveDown(distance);
+    }
+
+    public void moveLeft(double distance) {
+        this.corners[0].moveLeft(distance);
+        this.corners[1].moveLeft(distance);
+    }
+
+    public void moveRight(double distance) {
+        this.corners[0].moveRight(distance);
+        this.corners[1].moveRight(distance);
     }
 
     /*
