@@ -1,7 +1,6 @@
 package Solutions.step9;
 
 import java.awt.*;
-import java.awt.Rectangle;
 
 public class Square extends Rectangle {
 
