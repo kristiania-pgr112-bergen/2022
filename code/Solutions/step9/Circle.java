@@ -3,6 +3,7 @@ package Solutions.step9;
 import java.awt.*;
 
 public class Circle extends Shape {
+    private final MovablePoint center;
 
     private double radius;
 
@@ -10,9 +11,10 @@ public class Circle extends Shape {
         Let's have only one constructor. We require that all fields are populated through constructor.
         We now have no alternative options when creating a circle object.
      */
-    public Circle(int radius, Color color, boolean filled) {
+    public Circle(int radius, Color color, boolean filled, MovablePoint center) {
         super(color,filled);
         this.radius = radius;
+        this.center = center;
     }
 
     //Getter for radius
