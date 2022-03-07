@@ -30,18 +30,44 @@ public class Terminal {
         return this.scanner.nextLine();
     }
 
-    void printLine(String message) {
+    void ifEqual(int A, int B) {
+        if (A == B) {
+            this.printLine("green", A + " == " + B);
+        }
+        else {
+            this.printLine("red", A + " == " + B);
+        }
+    }
+
+    /**
+     * Prints out a normal line
+     * @param message A string line.
+     */
+    public void printLine(String message) {
         this.output.println(message);
     }
 
-    void printLine(String color, String message) {
+    /**
+     * Print out a line with a color specified
+     * @param color Which color to use, red, green, etc
+     * @param message The line to be printed
+     */
+    public void printLine(String color, String message) {
+        this.output.println(this.startColor(color) + message + this.endColor());
+    }
+
+    public String startColor(String color) {
         switch(color) {
-            case "white" -> this.output.println(message);
-            case "red" -> this.output.println("\033[31m" + message + "\033[0m");
-            case "green" -> this.output.println("\033[32m" + message + "\033[0m");
-            case "blue" -> this.output.println("\033[34m" + message + "\033[0m");
-            case "yellow" -> this.output.println("\033[33m" + message + "\033[0m");
+            case "red" -> { return "\033[31m"; }
+            case "green" -> { return "\033[32m"; }
+            case "blue" -> { return "\033[34m"; }
+            case "yellow" -> { return "\033[33m"; }
+            default -> { return ""; }
         }
+    }
+
+    public String endColor() {
+        return "\033[0m";
     }
 
     public String askQuestion(String question) {
@@ -54,8 +80,8 @@ public class Terminal {
         Terminal terminal = new Terminal(System.in, System.out);
 
         terminal.printLine("red", "Rød tekst!");
-        terminal.printLine("green", "Rød tekst!");
-        terminal.printLine("blue", "Rød tekst!");
+        terminal.printLine("white", "Rød tekst!");
+        terminal.printLine("white", "Rød tekst!");
         terminal.printLine("yellow", "Rød tekst!");
     }
 
