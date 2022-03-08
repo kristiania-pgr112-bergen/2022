@@ -1,12 +1,14 @@
 package LectureCode.Lecture11.test;
 import LectureCode.Lecture11.src.Address;
 import LectureCode.Lecture11.src.Person;
-import org.junit.Test;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static org.junit.Assert.*;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class OptionalExampleTest {
     @Test
@@ -21,10 +23,12 @@ public class OptionalExampleTest {
         Optional<String> opt = Optional.of(name);
         assertTrue(opt.isPresent());
     }
-    @Test(expected = NullPointerException.class)
+    @Test
     public void givenNull_whenCreatesNonNullable_thenException() {
-        String name = null;
-        Optional<String> opt = Optional.of(name);
+        assertThrows(NullPointerException.class, () -> {
+            String name = null;
+            Optional<String> opt = Optional.of(name);
+        });
     }
     @Test
     public void givenNonNull_whenCreatesNullable_thenCorrect() {
@@ -66,7 +70,7 @@ public class OptionalExampleTest {
         /**
          * lambda function here:() -> "Høyskolen Kristiania"
          */
-        String name = Optional.ofNullable(nullName).orElseGet(() -> "Høyskolen Kristiania");
+        String name = Optional.ofNullable(nullName).orElse("Høyskolen Kristiania");
         assertEquals("Høyskolen Kristiania", name);
         /**
          * or take functional interface this::getMyDefault as argument and invoked it
@@ -82,20 +86,19 @@ public class OptionalExampleTest {
         assertEquals("Høyskolen Kristiania", name);
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test
     public void givenOptionalWithNull_whenGetThrowsException_thenCorrect() {
-        Optional<String> opt = Optional.ofNullable(null);
-        String name = opt.get();
+        assertThrows(NoSuchElementException.class, () -> {
+            Optional<String> opt = Optional.ofNullable(null);
+            String name = opt.get();
+        });
     }
     public boolean ageIsValid(Person person) {
-        boolean isvalid = false;
-
-        if (person != null
+        boolean isValid = person != null
                 && (person.getAge() >= 10
-                && person.getAge() <= 15)) {
-            isvalid = true;
-        }
-        return isvalid;
+                && person.getAge() <= 15);
+
+        return isValid;
     }
     public boolean ageIsValid2(Person person) {
         return Optional.ofNullable(person)

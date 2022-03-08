@@ -1,12 +1,12 @@
 package LectureCode.Lecture11.test;
 
 import LectureCode.Lecture11.src.Person;
-import org.junit.Test;
 
 import java.io.*;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SerializableExampleTest {
     @Test
@@ -25,8 +25,8 @@ public class SerializableExampleTest {
         Person person2= (Person) objectInputStream.readObject();
         objectInputStream.close();
 
-        assertTrue(person2.getAge() == person.getAge());
-        assertTrue(person2.getName().equals(person.getName()));
-        assertFalse(person2.equals(person));
+        assertEquals(person2.getAge(), person.getAge());
+        assertEquals(person2.getName(), person.getName());
+        assertNotEquals(person2, person);
     }
 }
