@@ -1,14 +1,12 @@
 package Solutions.step14codebasis.src;
 
-import Solutions.step14.src.Customer;
-
 public class LoanInfo {
     double loanAmount;
-    Solutions.step14.src.Customer customer;
+    Customer customer;
     String startDate;
     Integer loanId;
 
-    public LoanInfo(double loanAmount, Solutions.step14.src.Customer customer, String startDate) {
+    public LoanInfo(double loanAmount, Customer customer, String startDate) {
         this.loanAmount = loanAmount;
         this.customer = customer;
         this.startDate = startDate;
@@ -22,7 +20,7 @@ public class LoanInfo {
         this.loanAmount = loanAmount;
     }
 
-    public Solutions.step14.src.Customer getCustomer() {
+    public Customer getCustomer() {
         return customer;
     }
 
