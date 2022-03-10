@@ -2,14 +2,15 @@ package LectureCode.Session14.test;
 
 import LectureCode.Lecture11.src.Address;
 import LectureCode.Lecture11.src.Person;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ValidateInputTest {
 
@@ -114,12 +115,15 @@ public class ValidateInputTest {
         cal.add(Calendar.DATE, 1);
         assertTrue(dateIsValid("Bergen", "Oslo", dateFormat.format(new Date())));
     }
-    @Test (expected = IllegalArgumentException.class)
-    public void validateInputDateIsValid_thenThrows(){
-        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -1);
-        dateIsValid("Bergen", "Oslo", dateFormat.format(cal.getTime()));
+    @Test
+    public void validateInputDateIsValid_thenThrows() {
+        assertThrows(IllegalArgumentException.class, () -> {
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DATE, -1);
+            dateIsValid("Bergen", "Oslo", dateFormat.format(cal.getTime()));
+        });
+
     }
 
 }

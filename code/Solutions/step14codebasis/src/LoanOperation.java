@@ -1,6 +1,5 @@
 package Solutions.step14codebasis.src;
 
-import Solutions.step14.src.LoanInfo;
 
 import java.util.HashMap;
 
