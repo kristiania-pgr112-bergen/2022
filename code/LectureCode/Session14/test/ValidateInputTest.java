@@ -2,7 +2,6 @@ package LectureCode.Session14.test;
 
 import LectureCode.Lecture11.src.Address;
 import LectureCode.Lecture11.src.Person;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.text.DateFormat;
@@ -11,6 +10,7 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ValidateInputTest {
 
@@ -117,7 +117,7 @@ public class ValidateInputTest {
     }
     @Test
     public void validateInputDateIsValid_thenThrows() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {
+        assertThrows(IllegalArgumentException.class, () -> {
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
             Calendar cal = Calendar.getInstance();
             cal.add(Calendar.DATE, -1);
