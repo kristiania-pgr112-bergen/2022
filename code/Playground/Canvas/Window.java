@@ -196,8 +196,8 @@ public class Window extends JPanel {
             switch (anchor) {
                 case CENTER                 -> { return new float[] { 0.5f, 0.5f }; }
                 case TOP, TOP_LEFT          -> { return new float[] { 0.0f, 0.0f }; }
-                case TOP_RIGHT              -> { return new float[] { 1.0f, 0.0f }; }
-                case BOTTOM_LEFT            -> { return new float[] { 0.0f, 1.0f }; }
+                case TOP_RIGHT, RIGHT       -> { return new float[] { 1.0f, 0.0f }; }
+                case BOTTOM_LEFT, LEFT      -> { return new float[] { 0.0f, 1.0f }; }
                 case BOTTOM, BOTTOM_RIGHT   -> { return new float[] { 1.0f, 1.0f }; }
                 default                     -> { return Canvas.getAnchorDisplacement(Anchor.TOP_LEFT); }
             }
@@ -271,6 +271,16 @@ public class Window extends JPanel {
         }
 
         //# SHAPES
+        public void drawTriangle(int... coordinates) {
+            ArrayList<Point> points = new ArrayList<>();
+
+            points.add(new Point(coordinates[0], coordinates[1]));
+            points.add(new Point(coordinates[2], coordinates[3]));
+            points.add(new Point(coordinates[4], coordinates[5]));
+
+            this.drawTriangle(points);
+        }
+
         public void drawTriangle(ArrayList<? extends Point> points) {
             if (this.isFillMode()) {
                 this.graphics.drawPolygon(
@@ -336,7 +346,7 @@ public class Window extends JPanel {
                 this.graphics.fillOval(p.x, p.y, (int)(p.x + (r * 2)), (int)(p.y + (r * 2)));
             }
             else {
-                this.graphics.drawOval(p.x, p.y, (int)(p.x+(r*2)), (int)(p.y+(r*2)));
+                this.graphics.drawOval(p.x, p.y, (int)(p.x+(r*2)), (int)(p.y + (r*2)));
             }
         };
         public void drawLine(int startX, int startY, int endX, int endY) {
