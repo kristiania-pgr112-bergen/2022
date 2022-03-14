@@ -19,13 +19,21 @@ public class Window extends JPanel {
     public static final String folderPath = "code/Playground/Canvas/";
     public static final String classPackage = Window.class.getPackageName();
 
-    public static final Font defaultFont = new Font(
+    public static Font defaultFont = new Font(
             "Consolas",
             Font.PLAIN,
             16
     );
 
-    public static final Color defaultTextColor = Color.black;
+    public static Color defaultTextColor = Color.black;
+
+    public static void setDefaultFont(Font font) {
+        Window.defaultFont = font;
+    }
+
+    public static void setDefaultTextColor(Color color) {
+        Window.defaultTextColor = color;
+    }
 
     Canvas canvas;
     ArrayList<String> order;
