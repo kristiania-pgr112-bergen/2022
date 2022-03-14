@@ -80,7 +80,7 @@ public class TicTacToe extends Window.Canvas.Plugin {
         }
 
         for (int i = 0; i < 9; i ++) {
-            int x = i % 3;
+            int x = i % (int)(TicTacToe.size);
             int y = (int)(i/TicTacToe.size);
 
             Rectangle clickArea = new Rectangle(
