@@ -3,17 +3,18 @@ package Playground.Canvas;
 import javax.swing.SwingUtilities;
 import javax.swing.JFrame;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Launcher {
     public static final boolean promptSize = false;
 
     public static final Dimension windowSize = new Dimension(
-            1920,
-            1080
+            1280,
+            1024
     );
 
-    static final JFrame frame = new JFrame("Playground");
+    static final JFrame frame = new JFrame("Playground Canvas PGR112");
 
     public static void main(String[] args) {
         int width = Launcher.windowSize.width;
@@ -41,11 +42,19 @@ public class Launcher {
 
     }
 
-    static void run(int width, int height) {
-        SwingUtilities.invokeLater(() -> {
-            Window window = new Window(Launcher.frame, width, height);
+    public static void run(int width, int height) {
+        Launcher.run(width, height, null);
+    }
 
-            window.initialize();
+    public static void run(ArrayList<String> loadOrder) {
+        Launcher.run(Launcher.windowSize.width, Launcher.windowSize.height, loadOrder);
+    }
+
+    protected static void run(int width, int height, ArrayList<String> loadOrder) {
+        SwingUtilities.invokeLater(() -> {
+            Window window = new Window(Launcher.frame, width, height, loadOrder);
+
+            window.initialize(loadOrder != null);
         });
     }
 }

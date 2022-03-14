@@ -22,10 +22,12 @@ public class Window extends JPanel {
     public static Font defaultFont = new Font(
             "Consolas",
             Font.PLAIN,
-            16
+            24
     );
 
-    public static Color defaultTextColor = Color.black;
+    public static Color defaultTextColor = Color.BLACK;
+
+    public static Color defaultBackgroundColor = Color.WHITE;
 
     public static void setDefaultFont(Font font) {
         Window.defaultFont = font;
@@ -43,16 +45,16 @@ public class Window extends JPanel {
     public void paint(Graphics graphics) {
         this.canvas.setGraphics((Graphics2D) graphics);
 
-        this.canvas.graphics.setBackground(Color.WHITE);
+        this.canvas.graphics.setBackground(Window.defaultBackgroundColor);
         this.canvas.clear();
 
-        System.out.printf("Rendering %d plugins ...%n", this.order.size());
+        // System.out.printf("Rendering %d plugins ...%n", this.order.size());
 
-        for (String plugin : this.order) {
-            System.out.printf("Processing class[%s]-plugin ...%n", plugin);
-            this.plugins.get(plugin).render(this.canvas);
+        for (String pluginName : this.order) {
+            // System.out.printf("Processing class[%s]-plugin ...%n", plugin);
+            this.plugins.get(pluginName).render(this.canvas);
         }
-    };
+    }
 
     public Window(JFrame frame, int width, int height, ArrayList<String> pluginOrder) {
         frame.setSize(width, height);
@@ -61,7 +63,11 @@ public class Window extends JPanel {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(this);
 
-        this.canvas = new Canvas(frame.getContentPane().getWidth(), frame.getContentPane().getHeight());
+        this.canvas = new Canvas(
+                this,
+                frame.getContentPane().getWidth(),
+                frame.getContentPane().getHeight()
+        );
         this.order = new ArrayList<>();
 
         if (pluginOrder != null) {
@@ -69,61 +75,88 @@ public class Window extends JPanel {
         }
 
         this.addMouseListener(new Canvas.CanvasMouseListener(this.canvas));
-    };
+    }
 
     Window(JFrame frame, int width, int height) {
         this(frame, width, height, null);
     }
 
     public void initialize() {
-        try {
-            File folder = new File("%splugins".formatted(Window.folderPath));
-            File loadOrder = new File("%s.plugins".formatted(Window.folderPath));
-            Scanner scanner = new Scanner(loadOrder);
+        this.initialize(true);
+    }
 
-            while(scanner.hasNextLine()) {
-                String line = scanner.nextLine();
+    public void initialize(boolean loadOrderOnly) {
+        if (loadOrderOnly) {
+            for (String pluginName : this.order) {
+                try {
+                    String pkg = "%s.%s".formatted(classPackage, pluginName);
 
-                this.order.add(line);
-                this.plugins.put(line, null);
-            };
+                    Class<?> cls = Class.forName(
+                            pkg,
+                            false,
+                            this.getClass().getClassLoader()
+                    );
 
-            for (final File file : Objects.requireNonNull(folder.listFiles())) {
-                if (file.isFile()) {
-                    String fileName = file.getName();
+                    Object plugin = cls.getDeclaredConstructor().newInstance();
 
-                    if (fileName.endsWith(".java")) {
-                        String className = fileName.substring(0, fileName.length() - 5);
+                    System.out.printf("Initializing class[%s] plugin%n", pluginName);
 
-                        Class<?> cls = Class.forName(
-                                "%s.plugins.%s".formatted(classPackage, className),
-                                false,
-                                this.getClass().getClassLoader()
-                        );
+                    this.plugins.put(pluginName, (Canvas.Plugin) plugin);
+                }
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        else {
+            try {
+                File folder = new File("%splugins".formatted(Window.folderPath));
+                File loadOrder = new File("%s.plugins".formatted(Window.folderPath));
+                Scanner scanner = new Scanner(loadOrder);
 
-                        Object plugin = cls.getDeclaredConstructor().newInstance();
+                while (scanner.hasNextLine()) {
+                    String line = scanner.nextLine();
 
-                        System.out.printf("Initializing class[%s]%n", className);
+                    this.order.add(line);
+                    this.plugins.put(line, null);
+                }
 
-                        if (this.order.contains(className)) {
-                            this.plugins.replace(className, (Canvas.Plugin) plugin);
-                        }
-                        else {
-                            this.order.add(className);
-                            this.plugins.put(className, (Canvas.Plugin) plugin);
+                for (final File file : Objects.requireNonNull(folder.listFiles())) {
+                    if (file.isFile()) {
+                        String fileName = file.getName();
+
+                        if (fileName.endsWith(".java")) {
+                            String className = fileName.substring(0, fileName.length() - 5);
+
+                            Class<?> cls = Class.forName(
+                                    "%s.plugins.%s".formatted(classPackage, className),
+                                    false,
+                                    this.getClass().getClassLoader()
+                            );
+
+                            Object plugin = cls.getDeclaredConstructor().newInstance();
+
+                            System.out.printf("Initializing class[%s] plugin%n", className);
+
+                            if (this.order.contains(className)) {
+                                this.plugins.replace(className, (Canvas.Plugin) plugin);
+                            } else {
+                                this.order.add(className);
+                                this.plugins.put(className, (Canvas.Plugin) plugin);
+                            }
                         }
                     }
                 }
-            };
-        } catch (Exception e) {
-            e.printStackTrace();
-        };
-    };
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     public static class Canvas {
-        protected HashMap<Rectangle, Function<Canvas, Boolean>> mouseClicks = new HashMap<>();
+        protected HashMap<Rectangle, Function<Point, Boolean>> mouseClicks = new HashMap<>();
 
-        public void onMouseClick(Rectangle area, Function<Canvas, Boolean> o) {
+        public void onMouseClick(Rectangle area, Function<Point, Boolean> o) {
             if (!(this.mouseClicks.containsKey(area))) {
                 this.mouseClicks.put(area, o);
             }
@@ -131,7 +164,7 @@ public class Window extends JPanel {
 
         public static abstract class Plugin {
             protected abstract void render(Canvas canvas);
-        };
+        }
 
         public static class CanvasMouseListener implements MouseListener {
             Canvas canvas;
@@ -142,19 +175,16 @@ public class Window extends JPanel {
 
             @Override
             public void mouseClicked(MouseEvent e) {
+                Point click = e.getPoint();
+
                 for (Rectangle area : this.canvas.mouseClicks.keySet()) {
-                    Point click = e.getPoint();
-
                     if (click.x >= area.x
-                     && click.x <= area.width
-                     && click.y >= area.y
-                     && click.y <= area.height
-                    ) {
-                        boolean result = this.canvas.mouseClicks.get(area).apply(this.canvas);
+                     && click.x <= (area.x + area.width)
 
-                        if (!result) {
-                            System.out.println("Mouse click event return false");
-                        }
+                     && click.y >= area.y
+                     && click.y <= (area.y + area.height)
+                    ) {
+                        this.canvas.mouseClicks.get(area).apply(click);
                     }
                 }
             }
@@ -189,24 +219,29 @@ public class Window extends JPanel {
             TOP_LEFT,
             TOP_RIGHT,
             BOTTOM_LEFT,
-            BOTTOM_RIGHT;
-        };
+            BOTTOM_RIGHT
+        }
 
         public static float[] getAnchorDisplacement(Anchor anchor) {
             switch (anchor) {
                 case CENTER                 -> { return new float[] { 0.5f, 0.5f }; }
-                case TOP, TOP_LEFT          -> { return new float[] { 0.0f, 0.0f }; }
-                case TOP_RIGHT, RIGHT       -> { return new float[] { 1.0f, 0.0f }; }
-                case BOTTOM_LEFT, LEFT      -> { return new float[] { 0.0f, 1.0f }; }
-                case BOTTOM, BOTTOM_RIGHT   -> { return new float[] { 1.0f, 1.0f }; }
-                default                     -> { return Canvas.getAnchorDisplacement(Anchor.TOP_LEFT); }
+                case TOP                    -> { return new float[] { 0.5f, 0.0f }; }
+                case TOP_LEFT               -> { return new float[] { 0.0f, 0.0f }; }
+                case TOP_RIGHT              -> { return new float[] { 1.0f, 0.0f }; }
+                case BOTTOM                 -> { return new float[] { 0.5f, 1.0f }; }
+                case BOTTOM_LEFT            -> { return new float[] { 0.0f, 1.0f }; }
+                case BOTTOM_RIGHT           -> { return new float[] { 1.0f, 1.0f }; }
+                case LEFT                   -> { return new float[] { 0.0f, 0.5f }; }
+                case RIGHT                  -> { return new float[] { 1.0f, 0.5f }; }
+                default                     -> { return Canvas.getAnchorDisplacement(Anchor.CENTER); }
             }
-        };
+        }
 
         public static class Cache<T> {
             protected HashMap<String, T> data = new HashMap<>();
         }
 
+        protected Window window;
         protected Graphics2D graphics = null;
         protected Cache<BufferedImage> cacheImages = new Cache<>();
 
@@ -215,19 +250,32 @@ public class Window extends JPanel {
         private final int width;
         private final int height;
 
-        Canvas(int width, int height) {
-            System.out.printf("Width[%d] x Height[%d]%n", width, height);
+        Canvas(Window window, int width, int height) {
+            this.window = window;
+            System.out.printf("Canvas width[%d] x height[%d]%n", width, height);
 
             this.width = width;
             this.height = height;
-        };
+        }
+
+        public void redraw() {
+            this.window.repaint();
+        }
 
         public int getWidth() {
             return this.width;
         }
 
+        public int getHalfWidth() {
+            return (int)(this.getWidth()/2.0d);
+        }
+
         public int getHeight() {
             return this.height;
+        }
+
+        public int getHalfHeight() {
+            return (int)(this.getHeight()/2.0d);
         }
 
         public boolean isFillMode() {
@@ -235,7 +283,7 @@ public class Window extends JPanel {
         }
 
         public void setFillMode() {
-            this.fillMode = true;
+            this.setFillMode(true);
         }
 
         public void setFillMode(boolean mode) {
@@ -248,17 +296,32 @@ public class Window extends JPanel {
 
         protected void setGraphics(Graphics2D graphics) {
             this.graphics = graphics;
-        };
+        }
 
         public void clear() {
             this.graphics.clearRect(0, 0, this.width, this.height);
 
             this.mouseClicks.clear();
-        };
+        }
 
         //# HELPER METHODS
         public float getAngle(Point A, Point B) {
             return (float) Math.atan2(A.y - B.y, A.x - B.x);
+        }
+
+        public Point getCenterPoint() {
+            return new Point(this.getHalfWidth(), this.getHalfHeight());
+        }
+
+        public Point getRelativePoint(float x, float y) {
+            return new Point((int)(this.getWidth()*x), (int)(this.getHeight()*y));
+        }
+
+        public Point getRandomPoint() {
+            return new Point(
+                    (int)(Math.random()*(this.getWidth() + 1)),
+                    (int)(Math.random()*(this.getHeight() + 1))
+            );
         }
 
         //# COLOR
@@ -266,12 +329,18 @@ public class Window extends JPanel {
             this.graphics.setColor(color);
         }
 
-        public void resetColor() {
+        public void clearColor() {
             this.graphics.setColor(Window.defaultTextColor);
+        }
+
+        public void setBackgroundColor(Color color) {
+            Window.defaultBackgroundColor = color;
         }
 
         //# SHAPES
         public void drawTriangle(int... coordinates) {
+            assert coordinates.length == 6;
+
             ArrayList<Point> points = new ArrayList<>();
 
             points.add(new Point(coordinates[0], coordinates[1]));
@@ -316,42 +385,119 @@ public class Window extends JPanel {
                         4
                 );
             }
-        };
+        }
+
+        public void drawSquare(Point point, int size, Anchor anchor) {
+            this.drawRectangle(point, new Dimension(size, size), anchor);
+        }
+
+        public void drawSquare(Point point, int size) {
+            this.drawRectangle(point, new Dimension(size, size));
+        }
+
+        public void drawRectangle(Rectangle r, Anchor anchor) {
+            this.drawRectangle(new Point(r.x, r.y), new Dimension(r.width, r.height), anchor);
+        }
 
         public void drawRectangle(Rectangle r) {
-            this.drawRectangle(r.x, r.y, r.width, r.height);
+            this.drawRectangle(new Point(r.x, r.y), new Dimension(r.width, r.height), Anchor.CENTER);
         }
 
         public void drawRectangle(Point point, Dimension size) {
-            this.drawRectangle(point.x, point.y, size.width, size.height);
+            this.drawRectangle(point, size, Anchor.CENTER);
         }
 
         public void drawRectangle(Point point, int w, int h) {
-            this.drawRectangle(point.x, point.y, w, h);
+            this.drawRectangle(point, new Dimension(w, h));
         }
 
         public void drawRectangle(int x, int y, int w, int h) {
+            this.drawRectangle(new Point(x, y), new Dimension(w, h), Anchor.CENTER);
+        }
+
+        public void drawRectangle(Point point, Dimension size, Anchor anchor) {
+            float[] transform = Canvas.getAnchorDisplacement(anchor);
+
             if (this.isFillMode()) {
-                this.graphics.fillRect(x, y, w, h);
+                this.graphics.fillRect(
+                        (int)(point.x - (size.width*transform[0])),
+                        (int)(point.y - (size.height*transform[1])),
+                        size.width,
+                        size.height
+                );
             }
             else {
-                this.graphics.drawRect(x, y, w, h);
+                this.graphics.drawRect(
+                        (int)(point.x - (size.width*transform[0])),
+                        (int)(point.y - (size.height*transform[1])),
+                        size.width,
+                        size.height
+                );
             }
-        };
+        }
+
+        public void drawCross(int x, int y, float r) {
+            this.drawCross(new Point(x, y), r);
+        }
+
+        public void drawCross(Point p, float r) {
+            this.drawCross(p, r, Anchor.CENTER);
+        }
+
+        public void drawCross(Point p, float r, Anchor anchor) {
+            double angle = Math.PI/4.0d;
+
+            this.drawLine(
+                    p.x - (int)(Math.cos(angle)*r),
+                    p.y - (int)(Math.sin(angle)*r),
+
+                    p.x - (int)(Math.cos(angle + Math.PI)*r),
+                    p.y - (int)(Math.sin(angle + Math.PI)*r)
+            );
+
+            this.drawLine(
+                    p.x - (int)(Math.cos(angle + Math.PI/2)*r),
+                    p.y - (int)(Math.sin(angle + Math.PI/2)*r),
+
+                    p.x - (int)(Math.cos(angle - Math.PI/2)*r),
+                    p.y - (int)(Math.sin(angle - Math.PI/2)*r)
+            );
+        }
+
+
         public void drawCircle(int x, int y, float r) {
             this.drawCircle(new Point(x, y), r);
         }
+
         public void drawCircle(Point p, float r) {
+            this.drawCircle(p, r, Anchor.CENTER);
+        }
+
+        public void drawCircle(Point p, float r, Window.Canvas.Anchor anchor) {
+            float[] transform = Canvas.getAnchorDisplacement(anchor);
+
             if (this.isFillMode()) {
-                this.graphics.fillOval(p.x, p.y, (int)(p.x + (r * 2)), (int)(p.y + (r * 2)));
+                this.graphics.fillOval(
+                        (int)(p.x - ((r*2)*transform[0])),
+                        (int)(p.y - ((r*2)*transform[1])),
+                        (int)(r * 2),
+                        (int)(r * 2)
+                );
             }
             else {
-                this.graphics.drawOval(p.x, p.y, (int)(p.x+(r*2)), (int)(p.y + (r*2)));
+                this.graphics.drawOval(
+                        (int)(p.x - ((r*2)*transform[0])),
+                        (int)(p.y - ((r*2)*transform[1])),
+                        (int)(r * 2),
+                        (int)(r * 2)
+                );
             }
-        };
+        }
+
         public void drawLine(int startX, int startY, int endX, int endY) {
             this.drawLine(new Point(startX, startY), new Point(endX, endY));
-        };
+        }
+
         public void drawLine(float startX, float startY, float endX, float endY) {
             this.drawLine(
                     (int)(this.getWidth()*startX),
@@ -423,7 +569,7 @@ public class Window extends JPanel {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        };
+        }
 
         public void drawImage(String fileName, int x, int y, Anchor anchor) {
             this.drawImage(fileName, new Point(x, y), anchor);
@@ -431,20 +577,24 @@ public class Window extends JPanel {
 
         public void drawImage(String fileName, int x, int y) {
             this.drawImage(fileName, x, y, Anchor.TOP_LEFT);
-        };
+        }
 
         //# IMAGE RELATIVE
         public void drawImage(String fileName, float x, float y, Anchor anchor) {
             this.drawImage(fileName, (int)(this.width*x), (int)(this.height*y), anchor);
-        };
+        }
 
         public void drawImage(String fileName, float x, float y) {
             this.drawImage(fileName, x, y, Anchor.TOP_LEFT);
-        };
+        }
 
         //# TEXT
         public void drawText(Font font, String text, int x, int y, Anchor anchor) {
             this.drawText(font, text, new Point(x, y), anchor);
+        }
+
+        public void drawText(String text, Point point) {
+            this.drawText(text, point, Anchor.CENTER);
         }
 
         public void drawText(Font font, String text, Point point, Anchor anchor) {
@@ -458,11 +608,15 @@ public class Window extends JPanel {
             this.graphics.drawString(text, textX, point.y);
 
             this.graphics.setFont(Window.defaultFont);
-        };
+        }
 
         public void drawText(Font font, String text, int x, int y) {
             this.drawText(font, text, x, y, Anchor.CENTER);
-        };
+        }
+
+        public void drawText(String text, Point point, Anchor anchor) {
+            this.drawText(Window.defaultFont, text, point, anchor);
+        }
 
         public void drawText(String text, int x, int y, Anchor anchor) {
             drawText(Window.defaultFont, text, x, y, anchor);
@@ -470,19 +624,19 @@ public class Window extends JPanel {
 
         public void drawText(String text, int x, int y) {
             this.drawText(Window.defaultFont, text, x, y);
-        };
+        }
 
         //# TEXT RELATIVE
         public void drawText(Font font, String text, float x, float y, Anchor anchor) {
             this.drawText(font, text, (int)(this.width*x), (int)(this.height*y), anchor);
-        };
+        }
 
         public void drawText(Font font, String text, float x, float y) {
             this.drawText(font, text, x, y, Anchor.CENTER);
-        };
+        }
 
         public void drawText(String text, float x, float y) {
             this.drawText(Window.defaultFont, text, x, y);
-        };
-    };
-};
+        }
+    }
+}

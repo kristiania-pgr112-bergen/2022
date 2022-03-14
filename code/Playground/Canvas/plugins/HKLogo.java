@@ -6,17 +6,22 @@ import java.awt.*;
 
 
 public class HKLogo extends Window.Canvas.Plugin {
+
+    private static int counter = 0;
+
     public void render(Window.Canvas canvas) {
         canvas.drawImage("hk-logo.png", 1, 1);
 
         canvas.drawText(
-                new Font("Consolas", Font.BOLD, 24),
-                "PGR112",
-                168, 108
+                "PGR112 (%d)".formatted(HKLogo.counter),
+                124, 104,
+                Window.Canvas.Anchor.LEFT
         );
 
-        canvas.onMouseClick(new Rectangle(1, 1, 256, 128), (context) -> {
-            System.out.println("Mouse click on HKLogo!");
+        canvas.onMouseClick(new Rectangle(1, 1, 256, 128), (click) -> {
+            HKLogo.counter ++;
+
+            canvas.redraw();
 
             return true;
         });
