@@ -17,8 +17,11 @@ public class TicTacToe extends Window.Canvas.Plugin {
         Launcher.run(plugins);
     }
 
+    //# Adjust size of board here
     static final float size = 3.0f;
+
     static final int slots = (int)(Math.pow(TicTacToe.size, 2));
+    static final int turns = TicTacToe.slots + 1;
 
     enum GridSlot {
         EMPTY,
@@ -71,7 +74,7 @@ public class TicTacToe extends Window.Canvas.Plugin {
                 0.5f, 0.15f
         );
 
-        if (TicTacToe.turn < 10) {
+        if (TicTacToe.turn < TicTacToe.turns) {
             canvas.drawText(
                     new Font("Arial", Font.BOLD, 24),
                     "Player %s".formatted(TicTacToe.player == 0 ? "One" : "Two"),
@@ -79,7 +82,7 @@ public class TicTacToe extends Window.Canvas.Plugin {
             );
         }
 
-        for (int i = 0; i < 9; i ++) {
+        for (int i = 0; i < TicTacToe.turns - 1; i ++) {
             int x = i % (int)(TicTacToe.size);
             int y = (int)(i/TicTacToe.size);
 
@@ -110,14 +113,14 @@ public class TicTacToe extends Window.Canvas.Plugin {
                 }
             }
 
-            if (TicTacToe.turn >= 10) {
+            if (TicTacToe.turn >= TicTacToe.turns) {
                 canvas.drawText(new Font("Arial", Font.BOLD, 21), "No more turns! Who won?", 0.5f, 0.8f);
             }
 
             int index = i;
             canvas.onMouseClick(
                     clickArea, (click) -> {
-                        if (TicTacToe.turn >= 10) {
+                        if (TicTacToe.turn >= TicTacToe.turns) {
                             return false;
                         }
 
