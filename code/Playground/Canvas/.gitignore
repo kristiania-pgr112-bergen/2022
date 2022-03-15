@@ -1,0 +1,5 @@
+plugins/*
+!plugins/HKLogo.java
+!plugins/PGR112.java
+images/*
+!images/hk-logo.png

@@ -20,16 +20,22 @@ This repository will change during the semester, from lecture to lecture, where 
 code/
 ├─ LectureCode/
 │       Contains code from the lectures, often requested from students
+│
+├─ Playground/Canvas/
+│       Contains a playground which can be used to solve tasks visually using a canvas
+│       Run the Launcher-class and check out the plugins/ folder to get started
+│
 ├─ Solutions/
 │       Contains example solutions to tasks from previous weeks
+│
 ├─ Tasks/
 │       Contains a code basis for some of the tasks
 │
-
-slides/
-        Contains the slides used in the lectures
-
-tasks/
+│
+├─ slides/
+│       Contains the slides used in the lectures
+│
+├─ tasks/
         Contains .PDF files which contains various tasks 
 ```
 
