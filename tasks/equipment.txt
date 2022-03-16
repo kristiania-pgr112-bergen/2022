@@ -1,0 +1,105 @@
+Ball
+12
+Locker 1
+false
+Football
+true
+Ball
+15
+Locker 2
+true
+Handball
+true
+Ball
+14
+Locker 2
+true
+Handball
+true
+Ball
+1
+Locker 3
+false
+Handball
+false
+Ball
+2
+Locker 3
+false
+Handball
+true
+Ball
+13
+Locker 1
+false
+Football
+false
+Ball
+3
+Locker 1
+false
+Football
+true
+Ball
+5
+Locker 4
+false
+Football
+true
+Ball
+6
+Locker 4
+false
+Football
+true
+TableTennisRacket
+16
+Locker 5
+false
+false
+TableTennisRacket
+17
+Locker 5
+true
+false
+TableTennisRacket
+18
+Locker 5
+false
+true
+Ball
+20
+Locker 6
+false
+Volleyball
+false
+Ball
+21
+Locker 6
+false
+Volleyball
+true
+Ball
+31
+Locker 7
+false
+Basketball
+false
+Ball
+32
+Locker 7
+false
+Basketball
+false
+Ball
+33
+Locker 7
+false
+Basketball
+true
+Ball
+34
+Locker 7
+true
+Basketball
+false
