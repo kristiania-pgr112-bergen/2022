@@ -7,7 +7,7 @@ public class HashsetExample {
     public void run() {
         Animal myPig = new Pig(1); // Create a Pig object
         Cat cat = new Cat(2);
-        HashSet<Animal> animals=new HashSet();
+        HashSet<Animal> animals=new HashSet<>();
         /**
          * hashset can contain duplicate elements, but during iterating,
          * duplicated elements will be ignored
@@ -40,7 +40,7 @@ public class HashsetExample {
         /**
          * Java HashSet from another Collection
          */
-        HashSet<Animal> newanimals=new HashSet();
+        HashSet<Animal> newanimals=new HashSet<>();
         newanimals.add(new Pig(3));
         newanimals.add(new Cat(4));
         animals.addAll(newanimals);
