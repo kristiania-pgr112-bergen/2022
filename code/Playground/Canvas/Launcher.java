@@ -43,18 +43,22 @@ public class Launcher {
     }
 
     public static void run(int width, int height) {
-        Launcher.run(width, height, null);
+        Launcher.run(width, height, null, false);
     }
 
     public static void run(ArrayList<String> loadOrder) {
-        Launcher.run(Launcher.windowSize.width, Launcher.windowSize.height, loadOrder);
+        Launcher.run(Launcher.windowSize.width, Launcher.windowSize.height, loadOrder, false);
     }
 
-    protected static void run(int width, int height, ArrayList<String> loadOrder) {
+    public static void run(int width, int height, ArrayList<String> loadOrder) {
+
+    }
+
+    public static void run(int width, int height, ArrayList<String> loadOrder, boolean external) {
         SwingUtilities.invokeLater(() -> {
             Window window = new Window(Launcher.frame, width, height, loadOrder);
 
-            window.initialize(loadOrder != null);
+            window.initialize(loadOrder != null, external);
         });
     }
 }

@@ -8,12 +8,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 import java.util.function.Function;
-import java.util.Objects;
-import java.util.Scanner;
 
 public class Window extends JPanel {
     public static final String folderPath = "code/Playground/Canvas/";
@@ -82,14 +78,14 @@ public class Window extends JPanel {
     }
 
     public void initialize() {
-        this.initialize(true);
+        this.initialize(true, false);
     }
 
-    public void initialize(boolean loadOrderOnly) {
+    public void initialize(boolean loadOrderOnly, boolean external) {
         if (loadOrderOnly) {
             for (String pluginName : this.order) {
                 try {
-                    String pkg = "%s.%s".formatted(classPackage, pluginName);
+                    String pkg = "%s%s".formatted(external ? "" : Window.classPackage + '.', pluginName);
 
                     Class<?> cls = Class.forName(
                             pkg,
@@ -324,6 +320,10 @@ public class Window extends JPanel {
             );
         }
 
+        public Point[] getCurvePath(int n, Point... points) {
+            return null;
+        }
+
         //# COLOR
         public void setColor(Color color) {
             this.graphics.setColor(color);
@@ -541,34 +541,80 @@ public class Window extends JPanel {
             this.clearFillMode();
         }
 
-        //# IMAGE
-        public void drawImage(String fileName, Point point, Anchor anchor) {
-            try {
-                if (!cacheImages.data.containsKey(fileName)) {
+        //# Graphical helpers
+        public Graphics getGraphics() {
+            return this.window.getGraphics();
+        }
+
+        public Graphics getCurrentGraphics() {
+            return this.graphics;
+        }
+
+        public BufferedImage getImage(String fileName) {
+            if (!cacheImages.data.containsKey(fileName)) {
+                try {
                     cacheImages.data.put(
                             fileName,
                             ImageIO.read(
                                     new File("%simages/%s".formatted(Window.folderPath, fileName))
                             )
                     );
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
-                BufferedImage image = cacheImages.data.get(fileName);
-
-                float[] transform = Canvas.getAnchorDisplacement(anchor);
-
-                int imageX = Math.max(0, point.x - (int)(image.getWidth()*transform[0]));
-                int imageY = Math.max(0, point.y - (int)(image.getHeight()*transform[1]));
-
-                this.graphics.drawImage(
-                        image,
-                        imageX,
-                        imageY,
-                        null
-                );
-            } catch (IOException e) {
-                e.printStackTrace();
             }
+
+            return cacheImages.data.get(fileName);
+        }
+
+        //# IMAGE (PART)
+        public void setGraphics(Graphics g) {
+            this.graphics = (Graphics2D) g;
+        }
+
+        public void drawImagePart(String fileName, Point point, Rectangle part, Anchor anchor) {
+            this.drawImagePart(this.getImage(fileName), point, part, anchor);
+        }
+
+        public void drawImagePart(BufferedImage image, Point point, Rectangle part, Anchor anchor) {
+            float[] scale = Canvas.getAnchorDisplacement(anchor);
+
+            int offsetX = (int)(part.width  * scale[0]);
+            int offsetY = (int)(part.height * scale[1]);
+
+            System.out.println(part);
+
+            this.graphics.drawImage(
+                    image,
+                    point.x - offsetX,
+                    point.y - offsetY,
+                    point.x - offsetX + part.width,
+                    point.y - offsetY + part.height,
+
+                    part.x,
+                    part.y,
+                    part.x + part.width,
+                    part.y + part.height,
+
+                    null
+            );
+        }
+
+        //# IMAGE
+        public void drawImage(String fileName, Point point, Anchor anchor) {
+            BufferedImage image = this.getImage(fileName);
+
+            float[] transform = Canvas.getAnchorDisplacement(anchor);
+
+            int imageX = Math.max(0, point.x - (int)(image.getWidth()*transform[0]));
+            int imageY = Math.max(0, point.y - (int)(image.getHeight()*transform[1]));
+
+            this.graphics.drawImage(
+                    image,
+                    imageX,
+                    imageY,
+                    null
+            );
         }
 
         public void drawImage(String fileName, int x, int y, Anchor anchor) {
