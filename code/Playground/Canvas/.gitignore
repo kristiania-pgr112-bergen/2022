@@ -3,3 +3,4 @@ plugins/*
 !plugins/PGR112.java
 images/*
 !images/hk-logo.png
+!images/playing-cards.png
