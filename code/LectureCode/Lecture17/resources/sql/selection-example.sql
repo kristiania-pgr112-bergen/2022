@@ -1,0 +1,1 @@
+SELECT * FROM lockers WHERE address = 'Address 0' ;
