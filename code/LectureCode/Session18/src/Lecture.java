@@ -13,13 +13,14 @@ public class Lecture {
             //# Create table if it does not exist
             query = "CREATE TABLE IF NOT EXISTS users"
             + "("
-                    + "id INT NOT NULL, "
+                    + "id INT NOT NULL AUTO_INCREMENT, "
                     + "username VARCHAR(64), "
                     + "password VARCHAR(256), "
                     + "PRIMARY KEY(id)"
             + ")";
 
             Statement statement = db.createStatement();
+
             statement.execute(query);
 
             //# Create admin user if it does not exist
@@ -38,7 +39,7 @@ public class Lecture {
                 newUser.setString(1, "admin");
                 newUser.setString(2, "admin-password");
 
-                newUser.execute()
+                newUser.execute();
             }
         }
         catch (SQLException e) {
