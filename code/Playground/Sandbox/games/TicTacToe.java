@@ -1,12 +1,15 @@
-package Playground.Canvas.games;
+package Playground.Sandbox.games;
 
-import Playground.Canvas.Launcher;
-import Playground.Canvas.Window;
+import Playground.Sandbox.*;
 
-import java.awt.*;
+import java.awt.Font;
+import java.awt.Point;
+import java.awt.Dimension;
+import java.awt.Rectangle;
+
 import java.util.ArrayList;
 
-public class TicTacToe extends Window.Canvas.Plugin {
+public class TicTacToe extends Canvas.Plugin {
 
     public static void main(String[] args) {
         ArrayList<String> plugins = new ArrayList<>();
@@ -34,7 +37,7 @@ public class TicTacToe extends Window.Canvas.Plugin {
     static int turn = 1;
 
     @Override
-    public void render(Window.Canvas canvas) {
+    public void render(Canvas canvas) {
         Point center = canvas.getCenterPoint();
         Dimension size = new Dimension(450, 450);
 

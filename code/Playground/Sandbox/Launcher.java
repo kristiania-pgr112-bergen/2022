@@ -1,4 +1,4 @@
-package Playground.Canvas;
+package Playground.Sandbox;
 
 import javax.swing.SwingUtilities;
 import javax.swing.JFrame;
@@ -10,8 +10,8 @@ public class Launcher {
     public static final boolean promptSize = false;
 
     public static final Dimension windowSize = new Dimension(
-            1280,
-            1024
+            900,
+            600
     );
 
     static final JFrame frame = new JFrame("Playground Canvas PGR112");
@@ -26,20 +26,17 @@ public class Launcher {
             System.out.printf("Width[%d]:", Launcher.windowSize.width);
             try {
                 width = Integer.parseInt(input.nextLine());
-            } catch (Exception ignored) {
-            }
+            } catch (Exception ignored) {}
 
             System.out.printf("Height[%d]:", Launcher.windowSize.height);
             try {
                 height = Integer.parseInt(input.nextLine());
-            } catch (Exception ignored) {
-            }
+            } catch (Exception ignored) {}
 
             input.close();
         }
 
         Launcher.run(width, height);
-
     }
 
     public static void run(int width, int height) {
@@ -51,12 +48,12 @@ public class Launcher {
     }
 
     public static void run(int width, int height, ArrayList<String> loadOrder) {
-
+        Launcher.run(width, height, loadOrder, false);
     }
 
     public static void run(int width, int height, ArrayList<String> loadOrder, boolean external) {
         SwingUtilities.invokeLater(() -> {
-            Window window = new Window(Launcher.frame, width, height, loadOrder);
+            Playground.Sandbox.Window window = new Window(Launcher.frame, width, height, loadOrder);
 
             window.initialize(loadOrder != null, external);
         });

@@ -1,18 +1,21 @@
-package Playground.Canvas.examples;
+package Playground.Sandbox.examples;
 
-import Playground.Canvas.Launcher;
-import Playground.Canvas.Window;
+import Playground.Sandbox.Launcher;
+import Playground.Sandbox.Canvas;
 
-import java.awt.*;
+import java.awt.Rectangle;
+import java.awt.Point;
+import java.awt.Dimension;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class DeckOfCards extends Window.Canvas.Plugin {
+public class DeckOfCards extends Canvas.Plugin {
     //# Launcher that only loads this plugin
     public static void main(String[] args) {
         ArrayList<String> plugins = new ArrayList<>();
 
-        plugins.add("Playground.Canvas.examples.DeckOfCards");
+        plugins.add("Playground.Sandbox.examples.DeckOfCards");
 
         Launcher.run(1200, 900, plugins, true);
     }
@@ -22,14 +25,14 @@ public class DeckOfCards extends Window.Canvas.Plugin {
 
     //# Render
     @Override
-    public void render(Window.Canvas canvas) {
+    public void render(Canvas canvas) {
         Card card = DeckOfCards.deck.cards.get(1);
 
         Point center = canvas.getCenterPoint();
 
         Dimension outputSize = new Dimension(
-                (Card.size.width * 13) + 7*12,
-                (Card.size.height * 4) + 7*3
+                (Card.size.width * 13) + (7*12),
+                (Card.size.height * 4) + (7*3) - 1
         );
 
         canvas.drawRectangle(center, outputSize);
@@ -46,8 +49,8 @@ public class DeckOfCards extends Window.Canvas.Plugin {
         }
     }
 
-    void renderCard(Window.Canvas canvas, Card card, Point point) {
-        float[] scale = Window.Canvas.getAnchorDisplacement(Window.Canvas.Anchor.TOP_LEFT);
+    void renderCard(Canvas canvas, Card card, Point point) {
+        float[] scale = Canvas.getAnchorDisplacement(Canvas.Anchor.TOP_LEFT);
 
         Point upperLeft = new Point(0, Card.size.height + 1);
         Point cardPosition = new Point(
@@ -61,16 +64,14 @@ public class DeckOfCards extends Window.Canvas.Plugin {
                 Card.size.width, Card.size.height
         );
 
-        System.out.println(part);
-
         canvas.drawImagePart(
                 "playing-cards.png",
                 cardPosition,
                 part,
-                Window.Canvas.Anchor.TOP_LEFT
+                Canvas.Anchor.TOP_LEFT
         );
 
-        canvas.drawRectangle(cardPosition, Card.size, Window.Canvas.Anchor.TOP_LEFT);
+        canvas.drawRectangle(cardPosition, Card.size, Canvas.Anchor.TOP_LEFT);
     }
 
     static class Deck {
