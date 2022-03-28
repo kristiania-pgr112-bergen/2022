@@ -161,6 +161,10 @@ public class Canvas {
         this.mouseClicks.clear();
     }
 
+    public void clearRectangle(Rectangle rectangle) {
+        this.graphics.clearRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+    }
+
     //# HELPER METHODS
     public float getAngle(Point A, Point B) {
         return (float) Math.atan2(A.y - B.y, A.x - B.x);
